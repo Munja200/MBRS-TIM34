@@ -17,13 +17,24 @@ public class FMClass extends FMType {
 	private List<String> importedPackages = new ArrayList<String>();
 	
 	/** @ToDo: add list of methods */
-	
+	private Page page = null;
 	
 	public FMClass(String name, String classPackage, String visibility) {
 		super(name, classPackage);		
 		this.visibility = visibility;
 	}	
 	
+	
+	public Page getPage() {
+		return page;
+	}
+
+
+	public void setPage(Page page) {
+		this.page = page;
+	}
+
+
 	public List<FMProperty> getProperties(){
 		return FMProperties;
 	}

@@ -7,6 +7,8 @@ import myplugin.generator.fmmodel.FMClass;
 import myplugin.generator.fmmodel.FMEnumeration;
 import myplugin.generator.fmmodel.FMModel;
 import myplugin.generator.fmmodel.FMProperty;
+import myplugin.generator.fmmodel.FMType;
+import myplugin.generator.fmmodel.Page;
 
 import com.nomagic.uml2.ext.jmi.helpers.ModelHelper;
 import com.nomagic.uml2.ext.jmi.helpers.StereotypesHelper;
@@ -17,6 +19,7 @@ import com.nomagic.uml2.ext.magicdraw.classes.mdkernel.Class;
 import com.nomagic.uml2.ext.magicdraw.classes.mdkernel.Enumeration;
 import com.nomagic.uml2.ext.magicdraw.classes.mdkernel.Property;
 import com.nomagic.uml2.ext.magicdraw.classes.mdkernel.Type;
+import com.nomagic.uml2.ext.magicdraw.mdprofiles.Stereotype;
 
 
 /** Model Analyzer takes necessary metadata from the MagicDraw model and puts it in 
@@ -91,7 +94,8 @@ public class ModelAnalyzer {
 			}
 			
 			/** @ToDo:
-			  * Process other package elements, as needed */ 
+			  * Process other package elements, as needed */
+
 		}
 	}
 	
@@ -109,9 +113,51 @@ public class ModelAnalyzer {
 		
 		/** @ToDo:
 		 * Add import declarations etc. */		
+		
+		// TODO: Ovo se koristi za preuzimanje stereoptipova
+		// TODO: Treba napraviti getTagValue metodu
+		Stereotype pageStereotype = StereotypesHelper.getAppliedStereotypeByString(cl, "Page");
+		if (pageStereotype != null) {
+			Boolean create = true;
+			Boolean update = true;
+			Boolean getAll = false;
+			Boolean details = true;
+			String pageName = fmClass.getName();
+
+			List<Property> tags = pageStereotype.getOwnedAttribute();
+			for (int j = 0; j < tags.size(); ++j) {
+				Property tagDef = tags.get(j);
+				String tagName = tagDef.getName();
+				List value = StereotypesHelper.getStereotypePropertyValue(cl, pageStereotype, tagName);
+				if(value.size() > 0) {
+					switch(tagName) {
+						case "create":
+							create = (Boolean) value.get(0);
+							break;
+						case "update":
+							update = (Boolean) value.get(0);
+							break;
+						case "getAll":
+							getAll = (Boolean) value.get(0);
+							break;
+						case "details":
+							details = (Boolean) value.get(0);
+							break;
+						case "pageName":
+							pageName = (String) value.get(0);  //TODO promeniti najv
+							break;
+					}
+				}
+			}
+			Page page = new Page(create, update, getAll, details, pageName);
+			fmClass.setPage(page);
+			System.out.println("Page(create, update, getAll, details, pageNmae): " +
+					create + " " + update + " " + getAll + " " + details + " "+ pageName );
+		}
+		
 		return fmClass;
 	}
-	
+
 	private FMProperty getPropertyData(Property p, Class cl) throws AnalyzeException {
 		String attName = p.getName();
 		if (attName == null) 
@@ -123,15 +169,23 @@ public class ModelAnalyzer {
 			p.getName() + " must have type!");
 		
 		String typeName = attType.getName();
+		String typePackage = attType.getPackage().getName();
 		if (typeName == null)
 			throw new AnalyzeException("Type ot the property " + cl.getName() + "." +
 			p.getName() + " must have name!");		
 			
 		int lower = p.getLower();
 		int upper = p.getUpper();
+
+		boolean reference = false;
+		String referenceType = "none";
+		if(p.getAssociation() != null) {	// p = com.nomagic.uml2.ext.magicdraw.classes.mdkernel.Property()
+			reference = true;
+			referenceType = p.getAggregation().toString().toLowerCase();
+		}
 		
-		FMProperty prop = new FMProperty(attName, typeName, p.getVisibility().toString(), 
-				lower, upper);
+		FMProperty prop = new FMProperty(attName, new FMType(typeName, typePackage), p.getVisibility().toString(),
+				lower, upper, reference, referenceType);
 		return prop;		
 	}	
 	

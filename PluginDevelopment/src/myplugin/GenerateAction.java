@@ -18,7 +18,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import myplugin.analyzer.AnalyzeException;
 import myplugin.analyzer.ModelAnalyzer;
-import myplugin.generator.EJBGenerator;
+
 import myplugin.generator.fmmodel.FMModel;
 import myplugin.generator.options.GeneratorOptions;
 import myplugin.generator.options.ProjectOptions;
@@ -26,58 +26,73 @@ import myplugin.generator.options.ProjectOptions;
 /** Action that activate code generation */
 @SuppressWarnings("serial")
 class GenerateAction extends MDAction{
-	
-	
-	public GenerateAction(String name) {			
-		super("", name, null, null);		
+
+
+	public GenerateAction(String name) {
+		super("", name, null, null);
 	}
 
 	public void actionPerformed(ActionEvent evt) {
-		
+
 		if (Application.getInstance().getProject() == null) return;
 		Package root = Application.getInstance().getProject().getModel();
-		
+
 		if (root == null) return;
-	
-		ModelAnalyzer analyzer = new ModelAnalyzer(root, "ejb");	
+
+		ModelAnalyzer analyzer = null;
+		GeneratorOptions generatorOptions = null;
+
+		String packageName = choosePackageName();
+		String outputPath = chooseOutputPath();
+		String javaOutputPath = outputPath + "/src/main/java";
+		String templatesOutputpath = outputPath + "/src/main/resources";
+		JOptionPane.showMessageDialog(null, "Code is successfully generated! Generated code is in folder: "
+				+ outputPath + ", package: " + packageName);
 		
-		try {
-			analyzer.prepareModel();	
-			GeneratorOptions go = ProjectOptions.getProjectOptions().getGeneratorOptions().get("EJBGenerator");			
-			EJBGenerator generator = new EJBGenerator(go);
-			generator.generate();
-			/**  @ToDo: Also call other generators */ 
-			JOptionPane.showMessageDialog(null, "Code is successfully generated! Generated code is in folder: " + go.getOutputPath() +
-					                         ", package: " + go.getFilePackage());
-			exportToXml();
-		} catch (AnalyzeException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage());
-		} 			
 	}
-	
+
+	private String choosePackageName() {
+		return JOptionPane.showInputDialog("Enter package name");
+	}
+
+	private String chooseOutputPath() {
+		JFileChooser chooser = new JFileChooser();
+		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		int returnVal = chooser.showOpenDialog(null);
+		String path = "";
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			path = chooser.getSelectedFile().getAbsolutePath();
+		}
+
+		return path;
+	}
+
+
+
 	private void exportToXml() {
-		if (JOptionPane.showConfirmDialog(null, "Do you want to save FM Model?") == 
-			JOptionPane.OK_OPTION)
-		{	
+		if (JOptionPane.showConfirmDialog(null, "Do you want to save FM Model?") ==
+				JOptionPane.OK_OPTION)
+		{
 			JFileChooser jfc = new JFileChooser();
 			if (jfc.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
 				String fileName = jfc.getSelectedFile().getAbsolutePath();
-			
+
 				XStream xstream = new XStream(new DomDriver());
-				BufferedWriter out;		
+				BufferedWriter out;
 				try {
 					out = new BufferedWriter(new OutputStreamWriter(
-							new FileOutputStream(fileName), "UTF8"));					
+							new FileOutputStream(fileName), "UTF8"));
 					xstream.toXML(FMModel.getInstance().getClasses(), out);
 					xstream.toXML(FMModel.getInstance().getEnumerations(), out);
-					
+
 				} catch (UnsupportedEncodingException e) {
-					JOptionPane.showMessageDialog(null, e.getMessage());				
+					JOptionPane.showMessageDialog(null, e.getMessage());
 				} catch (FileNotFoundException e) {
-					JOptionPane.showMessageDialog(null, e.getMessage());				
-				}		             
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				}
 			}
-		}	
-	}	  
+		}
+	}
 
 }
