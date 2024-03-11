@@ -18,7 +18,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import myplugin.analyzer.AnalyzeException;
 import myplugin.analyzer.ModelAnalyzer;
-
+import myplugin.generator.ModelGenerator;
 import myplugin.generator.fmmodel.FMModel;
 import myplugin.generator.options.GeneratorOptions;
 import myplugin.generator.options.ProjectOptions;
@@ -46,8 +46,16 @@ class GenerateAction extends MDAction{
 		String outputPath = chooseOutputPath();
 		String javaOutputPath = outputPath + "/src/main/java";
 		String templatesOutputpath = outputPath + "/src/main/resources";
-		JOptionPane.showMessageDialog(null, "Code is successfully generated! Generated code is in folder: "
-				+ outputPath + ", package: " + packageName);
+		
+		try {
+			generateModel(analyzer, root, generatorOptions, packageName, javaOutputPath);
+			
+			JOptionPane.showMessageDialog(null, "Code is successfully generated! Generated code is in folder: "
+					+ outputPath + ", package: " + packageName);
+		} 
+		catch (AnalyzeException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
 		
 	}
 
@@ -68,7 +76,14 @@ class GenerateAction extends MDAction{
 		return path;
 	}
 
-
+	private void generateModel(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String packageName, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, packageName + ".model");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("ModelLayerGenerator");
+		ModelGenerator generator = new ModelGenerator(generatorOptions, outputPath);
+		generator.generate();
+	}
 
 	private void exportToXml() {
 		if (JOptionPane.showConfirmDialog(null, "Do you want to save FM Model?") ==
