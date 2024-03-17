@@ -34,7 +34,7 @@ public class RepositoryGenerator extends BasicGenerator {
 			Writer out;
 			Map<String, Object> context = new HashMap<String, Object>();
 			try {
-				if(cl.getPage() != null) {
+				if(cl != null) {
 					out = getWriter(cl.getName(), cl.getTypePackage());
 					if (out != null) {
 						context.clear();
