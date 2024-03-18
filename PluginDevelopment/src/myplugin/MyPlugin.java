@@ -29,6 +29,8 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 		 * ProjectOptions.xml and take ejb generator options */
 		
 		modelOptions();
+		serviceOptions();
+
 		
 		//for test purpose only:
 		GeneratorOptions ejbOptions = new GeneratorOptions("c:/temp", "ejbclass", "templates", "{0}.java", true, "ejb"); 				
@@ -40,6 +42,12 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 	private void modelOptions() {
 		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/java", "jpa_model", "templates", "{0}.java", true, "uns.ftn.mbrs.model");
 		ProjectOptions.getProjectOptions().getGeneratorOptions().put("ModelLayerGenerator", generatorOptions);
+		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
+	}
+	
+	private void serviceOptions() {
+		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/java", "service", "templates", "{0}GenService.java", true, "uns.ftn.mbrs.service");
+		ProjectOptions.getProjectOptions().getGeneratorOptions().put("ServiceLayerGenerator", generatorOptions);
 		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
 	}
 
