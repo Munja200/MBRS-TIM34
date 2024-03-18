@@ -18,6 +18,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import myplugin.analyzer.AnalyzeException;
 import myplugin.analyzer.ModelAnalyzer;
+import myplugin.generator.ControllerGenerator;
 import myplugin.generator.ModelGenerator;
 import myplugin.generator.RepositoryGenerator;
 import myplugin.generator.fmmodel.FMModel;
@@ -51,7 +52,8 @@ class GenerateAction extends MDAction{
 		try {
 			generateModel(analyzer, root, generatorOptions, packageName, javaOutputPath);
 			generateRepositories(analyzer, root, generatorOptions, packageName, javaOutputPath);
-			
+			generateControllers(analyzer, root, generatorOptions, packageName, javaOutputPath);
+
 			JOptionPane.showMessageDialog(null, "Code is successfully generated! Generated code is in folder: "
 					+ outputPath + ", package: " + packageName);
 		} 
@@ -96,6 +98,15 @@ class GenerateAction extends MDAction{
 		RepositoryGenerator repositoryGenerator = new RepositoryGenerator(generatorOptions, outputPath);
 		repositoryGenerator.generate();
 	}
+	
+	private void generateControllers(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String packageName, String outputPath)
+			throws AnalyzeException {
+			analyzer = new ModelAnalyzer(root, packageName + ".controller");
+			analyzer.prepareModel();
+			generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("ControllerLayerGenerator");
+			ControllerGenerator controllerGenerator = new ControllerGenerator(generatorOptions, outputPath);
+			controllerGenerator.generate();
+		}
 
 	
 	private void exportToXml() {
