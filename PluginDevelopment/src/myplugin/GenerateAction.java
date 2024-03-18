@@ -18,6 +18,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 import myplugin.analyzer.AnalyzeException;
 import myplugin.analyzer.ModelAnalyzer;
+import myplugin.generator.CreatePageGenerator;
 import myplugin.generator.ModelGenerator;
 import myplugin.generator.RepositoryGenerator;
 import myplugin.generator.fmmodel.FMModel;
@@ -51,6 +52,7 @@ class GenerateAction extends MDAction{
 		try {
 			generateModel(analyzer, root, generatorOptions, packageName, javaOutputPath);
 			generateRepositories(analyzer, root, generatorOptions, packageName, javaOutputPath);
+			generateCreatePage(analyzer, root, generatorOptions, templatesOutputpath);
 			
 			JOptionPane.showMessageDialog(null, "Code is successfully generated! Generated code is in folder: "
 					+ outputPath + ", package: " + packageName);
@@ -95,8 +97,17 @@ class GenerateAction extends MDAction{
 		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("RepositoryGenerator");
 		RepositoryGenerator repositoryGenerator = new RepositoryGenerator(generatorOptions, outputPath);
 		repositoryGenerator.generate();
+
 	}
 
+	private void generateCreatePage(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("CreatePageGenerator");
+		CreatePageGenerator createPageGenerator = new CreatePageGenerator(generatorOptions, outputPath);
+		createPageGenerator.generate();
+	}
 	
 	private void exportToXml() {
 		if (JOptionPane.showConfirmDialog(null, "Do you want to save FM Model?") ==

@@ -30,6 +30,7 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 		
 		modelOptions();
 		repositoryOptions();
+		createPageOptions();
 		
 		//for test purpose only:
 		GeneratorOptions ejbOptions = new GeneratorOptions("c:/temp", "ejbclass", "templates", "{0}.java", true, "ejb"); 				
@@ -47,6 +48,12 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 	private void repositoryOptions() {
 		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/java", "repository", "templates", "{0}Repository.java", true, "uns.ftn.mbrs.repository");
 		ProjectOptions.getProjectOptions().getGeneratorOptions().put("RepositoryGenerator", generatorOptions);
+		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
+	}
+	
+	private void createPageOptions() {
+		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/resources", "create_page", "templates", "Create{0}.ftlh", true, "web");
+		ProjectOptions.getProjectOptions().getGeneratorOptions().put("CreatePageGenerator", generatorOptions);
 		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
 	}
 
