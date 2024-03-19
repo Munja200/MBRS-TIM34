@@ -19,6 +19,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import myplugin.analyzer.AnalyzeException;
 import myplugin.analyzer.ModelAnalyzer;
 import myplugin.generator.CreatePageGenerator;
+import myplugin.generator.CssGenerator;
 import myplugin.generator.DetailsPageGenerator;
 import myplugin.generator.EditPageGenerator;
 import myplugin.generator.IndexPageGenerator;
@@ -61,7 +62,8 @@ class GenerateAction extends MDAction{
 			generateEditPage(analyzer, root, generatorOptions, templatesOutputpath);
 			generateListPage(analyzer, root, generatorOptions, templatesOutputpath);
 			generateDetailsPage(analyzer, root, generatorOptions, templatesOutputpath);
-			
+			generateCss(analyzer, root, generatorOptions, templatesOutputpath);
+
 			JOptionPane.showMessageDialog(null, "Code is successfully generated! Generated code is in folder: "
 					+ outputPath + ", package: " + packageName);
 		} 
@@ -151,6 +153,15 @@ class GenerateAction extends MDAction{
 		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("DetailsPageGenerator");
 		DetailsPageGenerator generator = new DetailsPageGenerator(generatorOptions, outputPath);
 		generator.generate();
+	}
+	
+	private void generateCss(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("CssGenerator");
+		CssGenerator cssGenerator = new CssGenerator(generatorOptions, outputPath);
+		cssGenerator.generate();
 	}
 	
 	private void exportToXml() {

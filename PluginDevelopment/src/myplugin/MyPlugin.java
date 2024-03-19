@@ -35,6 +35,7 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 		editPageOptions();
 		listPageOptions();
 		detailsPageOptions();
+		cssOptions();
 		
 		//for test purpose only:
 		GeneratorOptions ejbOptions = new GeneratorOptions("c:/temp", "ejbclass", "templates", "{0}.java", true, "ejb"); 				
@@ -81,7 +82,13 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 	
 	private void detailsPageOptions() {
 		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/resources", "details_page", "templates", "{0}.ftlh", true, "web");
-		ProjectOptions.getProjectOptions().getGeneratorOptions().put("DetailPageGenerator", generatorOptions);
+		ProjectOptions.getProjectOptions().getGeneratorOptions().put("DetailsPageGenerator", generatorOptions);
+		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
+	}
+
+	private void cssOptions() {
+		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/resources", "css", "templates", "common.css", true, "web");
+		ProjectOptions.getProjectOptions().getGeneratorOptions().put("CssGenerator", generatorOptions);
 		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
 	}
 	
