@@ -19,6 +19,12 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import myplugin.analyzer.AnalyzeException;
 import myplugin.analyzer.ModelAnalyzer;
 import myplugin.generator.ControllerGenerator;
+import myplugin.generator.CreatePageGenerator;
+import myplugin.generator.CssGenerator;
+import myplugin.generator.DetailsPageGenerator;
+import myplugin.generator.EditPageGenerator;
+import myplugin.generator.IndexPageGenerator;
+import myplugin.generator.ListPageGenerator;
 import myplugin.generator.ModelGenerator;
 import myplugin.generator.RepositoryGenerator;
 import myplugin.generator.fmmodel.FMModel;
@@ -53,6 +59,12 @@ class GenerateAction extends MDAction{
 			generateModel(analyzer, root, generatorOptions, packageName, javaOutputPath);
 			generateRepositories(analyzer, root, generatorOptions, packageName, javaOutputPath);
 			generateControllers(analyzer, root, generatorOptions, packageName, javaOutputPath);
+			generateIndexPage(analyzer, root, generatorOptions, templatesOutputpath);
+			generateCreatePage(analyzer, root, generatorOptions, templatesOutputpath);
+			generateEditPage(analyzer, root, generatorOptions, templatesOutputpath);
+			generateListPage(analyzer, root, generatorOptions, templatesOutputpath);
+			generateDetailsPage(analyzer, root, generatorOptions, templatesOutputpath);
+			generateCss(analyzer, root, generatorOptions, templatesOutputpath);
 
 			JOptionPane.showMessageDialog(null, "Code is successfully generated! Generated code is in folder: "
 					+ outputPath + ", package: " + packageName);
@@ -97,6 +109,7 @@ class GenerateAction extends MDAction{
 		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("RepositoryGenerator");
 		RepositoryGenerator repositoryGenerator = new RepositoryGenerator(generatorOptions, outputPath);
 		repositoryGenerator.generate();
+
 	}
 	
 	private void generateControllers(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String packageName, String outputPath)
@@ -108,6 +121,59 @@ class GenerateAction extends MDAction{
 			controllerGenerator.generate();
 		}
 
+	private void generateCreatePage(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("CreatePageGenerator");
+		CreatePageGenerator createPageGenerator = new CreatePageGenerator(generatorOptions, outputPath);
+		createPageGenerator.generate();
+	}
+	
+	private void generateEditPage(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("EditPageGenerator");
+		EditPageGenerator generator = new EditPageGenerator(generatorOptions, outputPath);
+		generator.generate();
+	}
+	
+	private void generateIndexPage(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("IndexPageGenerator");
+		IndexPageGenerator generator = new IndexPageGenerator(generatorOptions, outputPath);
+		generator.generate();
+	}
+	
+	private void generateListPage(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("ListPageGenerator");
+		ListPageGenerator generator = new ListPageGenerator(generatorOptions, outputPath);
+		generator.generate();
+	}
+	
+	private void generateDetailsPage(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("DetailsPageGenerator");
+		DetailsPageGenerator generator = new DetailsPageGenerator(generatorOptions, outputPath);
+		generator.generate();
+	}
+	
+	private void generateCss(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("CssGenerator");
+		CssGenerator cssGenerator = new CssGenerator(generatorOptions, outputPath);
+		cssGenerator.generate();
+	}
 	
 	private void exportToXml() {
 		if (JOptionPane.showConfirmDialog(null, "Do you want to save FM Model?") ==
