@@ -19,6 +19,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import myplugin.analyzer.AnalyzeException;
 import myplugin.analyzer.ModelAnalyzer;
 import myplugin.generator.CreatePageGenerator;
+import myplugin.generator.DetailsPageGenerator;
 import myplugin.generator.EditPageGenerator;
 import myplugin.generator.IndexPageGenerator;
 import myplugin.generator.ListPageGenerator;
@@ -59,6 +60,7 @@ class GenerateAction extends MDAction{
 			generateCreatePage(analyzer, root, generatorOptions, templatesOutputpath);
 			generateEditPage(analyzer, root, generatorOptions, templatesOutputpath);
 			generateListPage(analyzer, root, generatorOptions, templatesOutputpath);
+			generateDetailsPage(analyzer, root, generatorOptions, templatesOutputpath);
 			
 			JOptionPane.showMessageDialog(null, "Code is successfully generated! Generated code is in folder: "
 					+ outputPath + ", package: " + packageName);
@@ -133,7 +135,6 @@ class GenerateAction extends MDAction{
 		generator.generate();
 	}
 	
-
 	private void generateListPage(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
 			throws AnalyzeException {
 		analyzer = new ModelAnalyzer(root, "templates");
@@ -142,7 +143,15 @@ class GenerateAction extends MDAction{
 		ListPageGenerator generator = new ListPageGenerator(generatorOptions, outputPath);
 		generator.generate();
 	}
-
+	
+	private void generateDetailsPage(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("DetailsPageGenerator");
+		DetailsPageGenerator generator = new DetailsPageGenerator(generatorOptions, outputPath);
+		generator.generate();
+	}
 	
 	private void exportToXml() {
 		if (JOptionPane.showConfirmDialog(null, "Do you want to save FM Model?") ==
