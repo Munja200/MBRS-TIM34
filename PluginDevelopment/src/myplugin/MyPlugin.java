@@ -30,6 +30,9 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 		
 		modelOptions();
 		repositoryOptions();
+		serviceOptions();
+		controllerOptions();
+
 		indexPageOptions();
 		createPageOptions();
 		editPageOptions();
@@ -56,12 +59,24 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
 	}
 	
+	private void serviceOptions() {
+		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/java", "service", "templates", "{0}GenService.java", true, "uns.ftn.mbrs.service");
+		ProjectOptions.getProjectOptions().getGeneratorOptions().put("ServiceLayerGenerator", generatorOptions);
+		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
+	}
+	
 	private void createPageOptions() {
 		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/resources", "create_page", "templates", "Create{0}.ftlh", true, "web");
 		ProjectOptions.getProjectOptions().getGeneratorOptions().put("CreatePageGenerator", generatorOptions);
 		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
 	}
 
+	private void controllerOptions() {
+		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/java", "kontroler", "templates", "{0}GenController.java", true, "uns.ftn.mbrs.controller");
+		ProjectOptions.getProjectOptions().getGeneratorOptions().put("ControllerLayerGenerator", generatorOptions);
+		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
+	}
+	
 	private void editPageOptions() {
 		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/resources", "edit_page", "templates", "Edit{0}.ftlh", true, "web");
 		ProjectOptions.getProjectOptions().getGeneratorOptions().put("EditPageGenerator", generatorOptions);
