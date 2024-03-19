@@ -33,6 +33,7 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 		indexPageOptions();
 		createPageOptions();
 		editPageOptions();
+		listPageOptions();
 		
 		//for test purpose only:
 		GeneratorOptions ejbOptions = new GeneratorOptions("c:/temp", "ejbclass", "templates", "{0}.java", true, "ejb"); 				
@@ -67,7 +68,13 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 	
 	private void indexPageOptions() {
 		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/resources", "index_page", "templates", "{0}.ftlh", true, "webapp");
-		ProjectOptions.getProjectOptions().getGeneratorOptions().put("IndexFreemarkerGenerator", generatorOptions);
+		ProjectOptions.getProjectOptions().getGeneratorOptions().put("IndexPageGenerator", generatorOptions);
+		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
+	}
+	
+	private void listPageOptions() {
+		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/resources", "list_page", "templates", "{0}s.ftlh", true, "webapp");
+		ProjectOptions.getProjectOptions().getGeneratorOptions().put("ListPageGenerator", generatorOptions);
 		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
 	}
 	

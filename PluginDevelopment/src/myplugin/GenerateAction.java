@@ -20,6 +20,8 @@ import myplugin.analyzer.AnalyzeException;
 import myplugin.analyzer.ModelAnalyzer;
 import myplugin.generator.CreatePageGenerator;
 import myplugin.generator.EditPageGenerator;
+import myplugin.generator.IndexPageGenerator;
+import myplugin.generator.ListPageGenerator;
 import myplugin.generator.ModelGenerator;
 import myplugin.generator.RepositoryGenerator;
 import myplugin.generator.fmmodel.FMModel;
@@ -53,8 +55,10 @@ class GenerateAction extends MDAction{
 		try {
 			generateModel(analyzer, root, generatorOptions, packageName, javaOutputPath);
 			generateRepositories(analyzer, root, generatorOptions, packageName, javaOutputPath);
+			generateIndexPage(analyzer, root, generatorOptions, templatesOutputpath);
 			generateCreatePage(analyzer, root, generatorOptions, templatesOutputpath);
 			generateEditPage(analyzer, root, generatorOptions, templatesOutputpath);
+			generateListPage(analyzer, root, generatorOptions, templatesOutputpath);
 			
 			JOptionPane.showMessageDialog(null, "Code is successfully generated! Generated code is in folder: "
 					+ outputPath + ", package: " + packageName);
@@ -119,6 +123,26 @@ class GenerateAction extends MDAction{
 		EditPageGenerator generator = new EditPageGenerator(generatorOptions, outputPath);
 		generator.generate();
 	}
+	
+	private void generateIndexPage(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("IndexPageGenerator");
+		IndexPageGenerator generator = new IndexPageGenerator(generatorOptions, outputPath);
+		generator.generate();
+	}
+	
+
+	private void generateListPage(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String outputPath)
+			throws AnalyzeException {
+		analyzer = new ModelAnalyzer(root, "templates");
+		analyzer.prepareModel();
+		generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("ListPageGenerator");
+		ListPageGenerator generator = new ListPageGenerator(generatorOptions, outputPath);
+		generator.generate();
+	}
+
 	
 	private void exportToXml() {
 		if (JOptionPane.showConfirmDialog(null, "Do you want to save FM Model?") ==
