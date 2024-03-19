@@ -30,6 +30,7 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 		
 		modelOptions();
 		repositoryOptions();
+		indexPageOptions();
 		createPageOptions();
 		editPageOptions();
 		
@@ -61,6 +62,12 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 	private void editPageOptions() {
 		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/resources", "edit_page", "templates", "Edit{0}.ftlh", true, "web");
 		ProjectOptions.getProjectOptions().getGeneratorOptions().put("EditPageGenerator", generatorOptions);
+		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
+	}
+	
+	private void indexPageOptions() {
+		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/resources", "index_page", "templates", "{0}.ftlh", true, "webapp");
+		ProjectOptions.getProjectOptions().getGeneratorOptions().put("IndexFreemarkerGenerator", generatorOptions);
 		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
 	}
 	
