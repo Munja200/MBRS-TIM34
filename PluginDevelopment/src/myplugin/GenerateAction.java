@@ -27,6 +27,7 @@ import myplugin.generator.IndexPageGenerator;
 import myplugin.generator.ListPageGenerator;
 import myplugin.generator.ModelGenerator;
 import myplugin.generator.RepositoryGenerator;
+import myplugin.generator.ServiceGenerator;
 import myplugin.generator.fmmodel.FMModel;
 import myplugin.generator.options.GeneratorOptions;
 import myplugin.generator.options.ProjectOptions;
@@ -58,6 +59,7 @@ class GenerateAction extends MDAction{
 		try {
 			generateModel(analyzer, root, generatorOptions, packageName, javaOutputPath);
 			generateRepositories(analyzer, root, generatorOptions, packageName, javaOutputPath);
+			generateServices(analyzer, root, generatorOptions, packageName, javaOutputPath);
 			generateControllers(analyzer, root, generatorOptions, packageName, javaOutputPath);
 			generateIndexPage(analyzer, root, generatorOptions, templatesOutputpath);
 			generateCreatePage(analyzer, root, generatorOptions, templatesOutputpath);
@@ -110,6 +112,15 @@ class GenerateAction extends MDAction{
 		RepositoryGenerator repositoryGenerator = new RepositoryGenerator(generatorOptions, outputPath);
 		repositoryGenerator.generate();
 
+	}
+	
+	private void generateServices(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String packageName, String outputPath)
+			throws AnalyzeException {
+			analyzer = new ModelAnalyzer(root, packageName + ".service");
+			analyzer.prepareModel();
+			generatorOptions = ProjectOptions.getProjectOptions().getGeneratorOptions().get("ServiceLayerGenerator");
+			ServiceGenerator serviceGenerator = new ServiceGenerator(generatorOptions, outputPath);
+			serviceGenerator.generate();
 	}
 	
 	private void generateControllers(ModelAnalyzer analyzer, Package root, GeneratorOptions generatorOptions, String packageName, String outputPath)

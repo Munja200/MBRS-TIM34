@@ -30,6 +30,7 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 		
 		modelOptions();
 		repositoryOptions();
+		serviceOptions();
 		controllerOptions();
 
 		indexPageOptions();
@@ -55,6 +56,12 @@ public class MyPlugin extends com.nomagic.magicdraw.plugins.Plugin {
 	private void repositoryOptions() {
 		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/java", "repository", "templates", "{0}Repository.java", true, "uns.ftn.mbrs.repository");
 		ProjectOptions.getProjectOptions().getGeneratorOptions().put("RepositoryGenerator", generatorOptions);
+		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
+	}
+	
+	private void serviceOptions() {
+		GeneratorOptions generatorOptions = new GeneratorOptions("c:/Temp/mbrs/mbrs/src/main/java", "service", "templates", "{0}GenService.java", true, "uns.ftn.mbrs.service");
+		ProjectOptions.getProjectOptions().getGeneratorOptions().put("ServiceLayerGenerator", generatorOptions);
 		generatorOptions.setTemplateDir(pluginDir + File.separator + generatorOptions.getTemplateDir());
 	}
 	
