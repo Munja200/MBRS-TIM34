@@ -5,7 +5,7 @@ package ${class.typePackage};
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ${class.typePackage?keep_before(".")}.model.${class.name};
+import ${class.typePackage?replace(".repository","")}.model.${class.name};
 
 import java.util.List;
 import java.util.Date;
