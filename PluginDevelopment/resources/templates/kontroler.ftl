@@ -19,20 +19,23 @@ public class HomeGenController {
 
 <#else>
 import lombok.RequiredArgsConstructor;
-import ${class.typePackage?keep_before(".")}.model.${class.name};
-import ${class.typePackage?keep_before(".")}.service.${class.name}GenService;
+import ${class.typePackage?replace(".controller","")}.model.${class.name};
+import ${class.typePackage?replace(".controller","")}.service.${class.name}GenService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 @Controller
 @RequestMapping("/${class.name?lower_case}")
 @RequiredArgsConstructor
 public class ${class.name}GenController {
 <#if class.page??>
-    private final ${class.name?cap_first}GenService ${serviceName};
+	@Autowired
+    private ${class.name?cap_first}GenService ${serviceName};
 
     <#if class.page.details?c=="true">
     @GetMapping("/{id}")

@@ -5,9 +5,10 @@
 package ${class.typePackage};
 
 import lombok.RequiredArgsConstructor;
-import ${class.typePackage?keep_before(".")}.model.${class.name};
-import ${class.typePackage?keep_before(".")}.repository.${class.name}Repository;
+import ${class.typePackage?replace(".service","")}.model.${class.name};
+import ${class.typePackage?replace(".service","")}.repository.${class.name}Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.lang.Exception;
@@ -16,7 +17,8 @@ import java.lang.Exception;
 @RequiredArgsConstructor
 public class ${class.name}GenService {
 <#if class.page??>
-    private final ${class.name?cap_first}Repository ${repositoryName};
+	@Autowired
+    private ${class.name?cap_first}Repository ${repositoryName};
 
 <#if class.page.details?c=="true" || class.page.update?c=="true">
     public ${class.name} findById(Long id) throws Exception {

@@ -3,16 +3,7 @@
 package ${class.typePackage};
 
 <#if class.name=="MbrsGeneratedApplication">
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
-public class ${class.name} {
-
-    public static void main(String[] args) {
-        SpringApplication.run(${class.name}.class, args);
-    }
-}
 <#else>
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

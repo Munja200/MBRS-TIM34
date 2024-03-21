@@ -40,17 +40,6 @@ public class ModelGenerator extends BasicGenerator {
 
 			String import_str = "";
 			try {
-				if(!mainAdded) {
-					FMClass mainClass = new FMClass("MbrsGeneratedApplication", cl.getTypePackage().substring(0, cl.getTypePackage().indexOf(".")), "true");
-					out = getWriter(mainClass.getName(), mainClass.getTypePackage());
-					if (out != null) {
-						context.clear();
-						context.put("class", mainClass);
-						getTemplate().process(context, out);
-						out.flush();
-					}
-					mainAdded = true;
-				}
 				out = getWriter(cl.getName(), cl.getTypePackage());
 				if (out != null) {
 					context.clear();
